@@ -2,6 +2,7 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from .models import Category, Product
 from .serializers import CategorySerializer, ProductSerializer
+from django.core.exceptions import PermissionDenied
 
 class CategoryViewSet(viewsets.ModelViewSet):
     """
@@ -15,8 +16,17 @@ class ProductViewSet(viewsets.ModelViewSet):
     """
     A viewset for viewing and editing product instances.
     """
-    queryset = Product.objects.filter(state=Product.ACCEPTED)  # Retrieve only accepted products
+    queryset = Product.objects.all() 
     serializer_class = ProductSerializer  # Serializer for product data
+
+    def get_queryset(self):
+        """
+        Optionally restricts the returned products to only those
+        that are accepted if the request method is 'GET'.
+        """
+        if self.request.method == 'GET':
+            return Product.objects.filter(state=Product.ACCEPTED)
+        return Product.objects.all()  # For other methods, return all products
 
     def perform_create(self, serializer):
         """
@@ -24,7 +34,7 @@ class ProductViewSet(viewsets.ModelViewSet):
         Args:
             serializer: The serializer instance that validates and saves the product data.
         """
-        serializer.save(creator=self.request.user)  # Set the creator of the product to the current user
+        serializer.save(creator=self.request.user, state='draft')  # Set the creator of the product to the current user
 
     def update(self, request, *args, **kwargs):
         """
