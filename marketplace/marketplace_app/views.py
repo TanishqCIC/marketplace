@@ -4,6 +4,7 @@ from .models import Category, Product
 from .serializers import CategorySerializer, ProductSerializer
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
+from django.conf import settings
 
 
 class CategoryViewSet(viewsets.ModelViewSet):

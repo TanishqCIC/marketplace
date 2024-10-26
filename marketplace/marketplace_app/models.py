@@ -67,7 +67,6 @@ class Product(models.Model):
             if user.is_staff:  # Only admin can change from NEW
                 if new_state in [self.REJECTED, self.BANNED, self.ACCEPTED]:
                     self.state = new_state
-                    self.send_notification()  # Notify creator of the change
                 else:
                     raise ValueError("Invalid state transition.")
             else:
@@ -79,12 +78,8 @@ class Product(models.Model):
             else:
                 raise PermissionDenied("Only the creator can move rejected products back to 'new'.")
         elif self.state in [self.BANNED, self.ACCEPTED]:
-            raise PermissionDenied("Banned and accepted products cannot change state.")
+            raise ValueError("Banned and accepted products cannot change state.")
         else:
             raise ValueError("Invalid state transition.")
         
         self.save()  # Save changes to the database
-
-    def send_notification(self):
-        #todo --> will configure later
-        return
