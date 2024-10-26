@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from .models import Category, Product
 from .serializers import CategorySerializer, ProductSerializer
 from django.core.exceptions import PermissionDenied
+from django.core.mail import send_mail
+
 
 class CategoryViewSet(viewsets.ModelViewSet):
     """
@@ -51,6 +53,9 @@ class ProductViewSet(viewsets.ModelViewSet):
             try:
                 # Attempt to change the state of the product
                 product.change_state(new_state, request.user)
+                # Check if the new state is one of the states that require email notification
+                if new_state in ['rejected', 'banned', 'accepted']:
+                    self.send_state_change_email(product, new_state)
                 return Response({'status': 'state updated'}, status=status.HTTP_200_OK)  # Return success response
             except PermissionDenied as e:
                 # Handle permission errors
@@ -61,3 +66,22 @@ class ProductViewSet(viewsets.ModelViewSet):
 
         # If no new state is provided, proceed with the default update behavior
         return super().update(request, *args, **kwargs)
+
+    def send_state_change_email(self, product, new_state):
+        """
+        Send an email notification to the creator when the state changes.
+        Args:
+            product: The product instance whose state has changed.
+            new_state: The new state of the product.
+        """
+        subject = f"Product '{product.title}' state changed to '{new_state}'"
+        message = f"Hello {product.creator.username},\n\n" \
+                  f"The state of your product '{product.title}' has been changed to '{new_state}'.\n\n" \
+                  "Thank you!"        
+        send_mail(
+            subject,
+            message,
+            'whoppah.marketplace@example.com',
+            [product.creator.email],
+            fail_silently=False,
+        )
