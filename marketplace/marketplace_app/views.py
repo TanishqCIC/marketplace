@@ -90,7 +90,7 @@ class ProductViewSet(viewsets.ModelViewSet):
             fail_silently=False,
         )
 
-class UserCreateViewSet(generics.CreateAPIView):
+class UserCreateViewSet(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
     
