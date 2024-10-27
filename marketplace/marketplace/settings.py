@@ -16,7 +16,7 @@ from dotenv import load_dotenv
 import dj_database_url
 
 DATABASES = {
-    'default': dj_database_url.config(default=f"postgres://marketplace_user:{os.getenv('DB_PASSWORD') }@db:5432/marketplace_db")
+    'default': dj_database_url.config(default=f"postgres://postgres:{os.getenv('DB_PASSWORD') }@autorack.proxy.rlwy.net:27922/railway")
 }
 
 
