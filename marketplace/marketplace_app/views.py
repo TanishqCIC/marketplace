@@ -5,6 +5,7 @@ from .serializers import CategorySerializer, ProductSerializer
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.conf import settings
+import os
 
 
 class CategoryViewSet(viewsets.ModelViewSet):
@@ -75,6 +76,7 @@ class ProductViewSet(viewsets.ModelViewSet):
             product: The product instance whose state has changed.
             new_state: The new state of the product.
         """
+        print(os.getenv('EMAIL_HOST_PASSWORD'))
         subject = f"Product '{product.title}' state changed to '{new_state}'"
         message = f"Hello {product.creator.username},\n\n" \
                   f"The state of your product '{product.title}' has been changed to '{new_state}'.\n\n" \
