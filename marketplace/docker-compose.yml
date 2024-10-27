@@ -6,8 +6,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      POSTGRES_DB: marketplace_db
-      POSTGRES_USER: marketplace_user
+      POSTGRES_DB: railway
+      POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${DB_PASSWORD}
 
   web:
@@ -20,7 +20,7 @@ services:
     depends_on:
       - db
     environment:
-      - DATABASE_URL=postgres://marketplace_user:${DB_PASSWORD}@db:5432/marketplace_db
+      - DATABASE_URL=postgresql://postgres:${DB_PASSWORD}@autorack.proxy.rlwy.net:27922/railway
 
 volumes:
   postgres_data:
