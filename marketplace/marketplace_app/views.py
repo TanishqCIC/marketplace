@@ -6,6 +6,7 @@ from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.conf import settings
 from rest_framework import generics
+from django.contrib.auth.models import User
 import os
 
 
@@ -91,8 +92,9 @@ class ProductViewSet(viewsets.ModelViewSet):
 
 class UserCreateViewSet(generics.CreateAPIView):
     serializer_class = UserSerializer
-
-    def post(self, request, *args, **kwargs):
+    queryset = User.objects.all()
+    
+    def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
