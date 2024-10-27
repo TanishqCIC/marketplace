@@ -1,10 +1,11 @@
 from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from .models import Category, Product
-from .serializers import CategorySerializer, ProductSerializer
+from .serializers import CategorySerializer, ProductSerializer, UserSerializer
 from django.core.exceptions import PermissionDenied
 from django.core.mail import send_mail
 from django.conf import settings
+from rest_framework import generics
 import os
 
 
@@ -88,3 +89,12 @@ class ProductViewSet(viewsets.ModelViewSet):
             [product.creator.email],
             fail_silently=False,
         )
+
+class UserCreateViewSet(generics.CreateAPIView):
+    serializer_class = UserSerializer
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        return Response({"id": user.id, "username": user.username}, status=status.HTTP_201_CREATED)
