@@ -14,6 +14,13 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 import dj_database_url
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  
+    'ROTATE_REFRESH_TOKENS': True,
+}
 
 DATABASES = {
     'default': dj_database_url.config(default=f"postgres://postgres:{os.getenv('DB_PASSWORD') }@autorack.proxy.rlwy.net:27922/railway")
@@ -53,6 +60,14 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'marketplace_app',
     'rest_framework',
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://marketplace-production-a60e.up.railway.app',
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'https://marketplace-production-a60e.up.railway.app',
 ]
 
 REST_FRAMEWORK = {
