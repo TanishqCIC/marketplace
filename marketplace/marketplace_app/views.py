@@ -77,7 +77,6 @@ class ProductViewSet(viewsets.ModelViewSet):
             product: The product instance whose state has changed.
             new_state: The new state of the product.
         """
-        print('mail2', os.getenv('EMAIL_HOST_PASSWORD'))
         subject = f"Product '{product.title}' state changed to '{new_state}'"
         message = f"Hello {product.creator.username},\n\n" \
                   f"The state of your product '{product.title}' has been changed to '{new_state}'.\n\n" \
