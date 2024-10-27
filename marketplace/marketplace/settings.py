@@ -34,7 +34,12 @@ SECRET_KEY = 'django-insecure-kgpi9j08n9&h_)2^zcjo9n%^w5djrpx7q%i1&7#t-e01!h=j!k
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'marketplace-production-a60e.up.railway.app',
+    'localhost',  
+    '127.0.0.1',  
+]
+
 
 
 # Application definition
