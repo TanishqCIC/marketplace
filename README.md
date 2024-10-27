@@ -20,8 +20,7 @@ Getting Started
 
 Prerequisites
 1. Docker
-2. Docker Compose
-3. Using Docker
+2. Django
 
 Clone the repository:
 
