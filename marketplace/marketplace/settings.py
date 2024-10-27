@@ -16,6 +16,7 @@ from dotenv import load_dotenv
 import dj_database_url
 from datetime import timedelta
 
+
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),  
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),  
@@ -159,7 +160,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = ('myproject/staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
