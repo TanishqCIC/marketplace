@@ -77,10 +77,6 @@ class ProductUpdateTests(APITestCase):
         self.client.login(username='testuser', password='password')
         self.token = self.obtain_jwt_token()
         self.headers = {'HTTP_AUTHORIZATION': f'Bearer {self.token}'}
-        # self.assertTrue(self.client.login(username='testuser', password='password'))  # Check login was successful
-        # self.client.login(username='testuseradmin', password='password')
-        # self.admin_token = self.obtain_jwt_token_for_admin()
-        # self.admin_headers = {'HTTP_AUTHORIZATION': f'Bearer {self.admin_token}'}
         settings.EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
 
         self.category = Category.objects.create(title='Art', slug='art')
