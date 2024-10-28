@@ -3,6 +3,7 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
 from django.core.exceptions import PermissionDenied
+from django.core.validators import MinValueValidator
 
 class Category(models.Model):
     title = models.CharField(max_length=255)  # Title of the category
@@ -37,7 +38,11 @@ class Product(models.Model):
     title = models.CharField(max_length=255)  # Title of the product
     slug = models.SlugField(unique=True, blank=True)  # Unique slug of the product
     description = models.TextField()  # Detailed description of the product
-    price = models.DecimalField(max_digits=10, decimal_places=2)  # Price of the product
+    price = models.DecimalField(
+        max_digits=10, 
+        decimal_places=2, 
+        validators=[MinValueValidator(0.01)]  # Ensures price is positive
+    )
     category = models.ForeignKey(Category, on_delete=models.CASCADE)  # Category the product belongs to
     creator = models.ForeignKey(User, on_delete=models.CASCADE)  # User who created the product
     state = models.CharField(max_length=20, choices=STATE_CHOICES, default=DRAFT)  # Current state of the product
