@@ -8,6 +8,7 @@ from django.conf import settings
 from rest_framework import generics
 from django.contrib.auth.models import User
 # from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 from rest_framework.exceptions import ValidationError
 import os
 
@@ -58,8 +59,16 @@ class ProductViewSet(viewsets.ModelViewSet):
         try:
             serializer.is_valid(raise_exception=True)
             serializer.save(creator=request.user, state='draft')
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            resp = Response(serializer.data, status=status.HTTP_201_CREATED)
+            return resp
         except ValidationError as e:
+            # Handle unique constraint violation
+            if 'slug' in str(e):  # Check for a specific unique field
+                return Response({'error': 'A product with this slug already exists.'},
+                                status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Invalid data provided.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        except IntegrityError as e:
             # Handle unique constraint violation
             if 'slug' in str(e):  # Check for a specific unique field
                 return Response({'error': 'A product with this slug already exists.'},

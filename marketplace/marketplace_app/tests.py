@@ -130,6 +130,20 @@ class ProductUpdateTests(APITestCase):
         self.assertEqual(Product.objects.count(), 2)  # One existing, one created
         self.assertEqual(Product.objects.get(title='New Product').state, 'draft')
 
+    def test_unique_slug(self):
+        Product.objects.create(title='New Product', description='A new product.', price=150.00, category=self.category, state='draft', creator=self.user)
+        url = reverse('product-list')
+        data = {
+            'title': 'New Product',
+            'description': 'A new product.',
+            'price': 150.00,
+            'category': self.category.id,
+            'state': 'draft'
+        }
+        response = self.client.post(url, data, format='json', **self.headers)
+        
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_move_product_from_draft_to_new(self):
         self.product.state = 'draft'
         self.product.save()
