@@ -68,6 +68,7 @@ class CategoryTests(APITestCase):
         
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
+
 class ProductUpdateTests(APITestCase):
     def setUp(self):
         self.user = User.objects.create_user(username='testuser', password='password')

@@ -7,7 +7,8 @@ from django.core.mail import send_mail
 from django.conf import settings
 from rest_framework import generics
 from django.contrib.auth.models import User
-from django.core.exceptions import ValidationError
+# from django.core.exceptions import ValidationError
+from rest_framework.exceptions import ValidationError
 import os
 
 
@@ -24,7 +25,8 @@ class CategoryViewSet(viewsets.ModelViewSet):
         try:
             serializer.is_valid(raise_exception=True)
             serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            response = Response(serializer.data, status=status.HTTP_201_CREATED)
+            return response
         except ValidationError as e:
             # Handle unique constraint violation
             if 'slug' in str(e):  # Check for a specific unique field
