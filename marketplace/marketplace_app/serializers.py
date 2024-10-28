@@ -26,3 +26,7 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id', 'title', 'slug', 'description', 'price', 'category', 'state']
+        def validate_slug(self, value):
+            if Product.objects.filter(slug=value).exists():
+                raise serializers.ValidationError("A product with this slug already exists.")
+            return value
